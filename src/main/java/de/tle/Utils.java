@@ -16,17 +16,17 @@ public class Utils {
                     password.append(CHARACTERS.charAt(index));
                 }
             }
-            displayProgress(i, 20);
-            Thread.sleep(250); // Simulate some delay in generation
+            displayProgress(i);
+            Thread.sleep(150); // Simulate some delay in generation
         }
         return password.toString();
     }
 
-    private void displayProgress(int current, int total) {
-        int percent = (int) ((current / (double) total) * 100);
+    private void displayProgress(int current) {
+        int percent = (int) ((current / (double) 20) * 100);
         StringBuilder progress = new StringBuilder("[");
 
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < 20; i++) {
             if (i < current) {
                 progress.append("#");
             } else {
@@ -35,6 +35,6 @@ public class Utils {
         }
         progress.append("] ").append(percent).append("% ");
 
-        System.out.print("\r" + progress.toString());
+        System.out.print("\r" + progress);
     }
 }
