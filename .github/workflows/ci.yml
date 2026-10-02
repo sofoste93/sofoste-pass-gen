@@ -1,0 +1,30 @@
+name: Continuous integration
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify Java engine and desktop app
+        run: mvn --batch-mode verify
+      - name: Verify Web Crypto engine
+        run: node --test test/password-engine.test.mjs
+      - name: Runtime diagnostic
+        run: java -jar target/aurora-vault.jar --diagnostics

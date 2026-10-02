@@ -1,0 +1,14 @@
+{
+  "name": "Aurora Vault · Password Studio",
+  "short_name": "Aurora Vault",
+  "description": "A private password generator that works entirely on your device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071921",
+  "theme_color": "#071921",
+  "icons": [
+    { "src": "assets/aurora-vault-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/aurora-vault-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

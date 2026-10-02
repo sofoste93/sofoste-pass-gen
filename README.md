@@ -1,129 +1,132 @@
-# Random Password Generator (sofoste-pass-gen)
+<p align="center">
+  <img src="web/assets/aurora-vault.svg" width="132" alt="Aurora Vault logo">
+</p>
 
-## Overview
+<h1 align="center">Aurora Vault · Password Studio</h1>
 
-This project is a simple console-based random password generator written in Java. It generates a secure random password and simulates the generation process with a progress bar displayed in the console.
+<p align="center">
+  A private password generator for desktop and mobile. Everything happens on your device.
+</p>
+
+<p align="center">
+  <a href="https://sofoste93.github.io/sofoste-pass-gen/"><strong>Open the mobile app</strong></a>
+  ·
+  <a href="https://github.com/sofoste93/sofoste-pass-gen/releases/latest"><strong>Download for desktop</strong></a>
+  ·
+  <a href="#learning-map">Learn from the code</a>
+</p>
+
+![Aurora Vault desktop interface](docs/aurora-vault-desktop.png)
+
+## A simple vault with two doors
+
+Aurora Vault 2.0 turns the original Java console exercise into two complementary applications:
+
+- a polished Java desktop app with its own bundled runtime;
+- an installable Progressive Web App for Android, iPhone, iPad and desktop browsers.
+
+Both versions generate passwords locally. They never send, save, log or analyze generated values.
 
 ## Features
 
-- Generates a random password with specified length.
-- Displays a progress bar that updates gradually during the password generation process.
-- Uses secure random number generation for better security.
+- Cryptographically secure randomness with Java `SecureRandom` and browser Web Crypto
+- Uppercase, lowercase, number and symbol controls
+- Guaranteed use of every selected character group
+- Optional removal of ambiguous characters such as `0/O` and `1/l`
+- Length from 8 to 64 in the interfaces and up to 128 through the Java engine
+- Live entropy estimate and clear strength indicator
+- English and German interface
+- Aurora Night, Polar Day and system themes
+- Reduced-motion setting, keyboard shortcut and accessible controls
+- Offline PWA after the first visit
+- No analytics, account, network API or password history
 
-## Usage
+## On a phone
 
-### Prerequisites
+<p align="center">
+  <img src="docs/aurora-vault-mobile.png" width="390" alt="Aurora Vault mobile interface">
+</p>
 
-- Java Development Kit (JDK) installed on your system.
+Open [Aurora Vault online](https://sofoste93.github.io/sofoste-pass-gen/) from your phone.
 
-### Running the Application
+- **Android / Chrome:** open the browser menu and choose **Install app** or **Add to Home screen**.
+- **iPhone / Safari:** tap **Share**, then **Add to Home Screen**.
 
-1. Clone or download the repository to your local machine.
-2. Navigate to the project directory.
-3. Compile the Java files:
-    ```sh
-    javac de/tle/*.java
-    ```
-4. Run the `PassGenApp` class:
-    ```sh
-    java de.tle.PassGenApp
-    ```
+Once installed, the generator opens like a normal app and remains available offline. The generated password stays inside the current browser page until you replace or close it.
 
-### Example Output
-![output_example.png](output_example.png)
-```plaintext
-Generating |###############     | 85%
-Generating |##################  | 95%
-Generating |####################| 100%
+## Desktop downloads
 
-Your new Pass: EsYAQFWdWzRD
+Download the archive for your system from [GitHub Releases](https://github.com/sofoste93/sofoste-pass-gen/releases/latest). Each native package contains a private Java runtime, so Java does not need to be installed.
+
+| System | Release asset | Launch |
+|---|---|---|
+| Windows 10/11 x64 | `Aurora-Vault-Windows-x64.zip` | `AuroraVault.exe` |
+| Linux x64 | `Aurora-Vault-Linux-x64.tar.gz` | `bin/AuroraVault` |
+| macOS Intel | `Aurora-Vault-macOS-x64.tar.gz` | `AuroraVault.app` |
+| macOS Apple Silicon | `Aurora-Vault-macOS-arm64.tar.gz` | `AuroraVault.app` |
+
+Windows SmartScreen and macOS Gatekeeper can warn about unsigned community applications. The SHA-256 file in every release lets you verify the download.
+
+## Command line
+
+The original console spirit remains available for scripts and learning:
+
+```bash
+java -jar aurora-vault.jar --cli --length 24 --count 3 --exclude-ambiguous
 ```
 
-## Code Structure
+Run `java -jar aurora-vault.jar --help` for all options.
 
-### PassGenApp.java
-This is the main class that initiates the password generation process.
-```
-public class PassGenApp {
+## Learning map
 
-    public static Utils newPass = new Utils();
+The code contains comments where the reasoning matters, especially around secure randomness and unbiased selection. Obvious syntax stays uncluttered so beginners can follow the flow.
 
-    public static void main(String[] args) throws InterruptedException {
+| File | What it teaches |
+|---|---|
+| `PasswordPolicy.java` | Immutable configuration, records and validation |
+| `PasswordGenerator.java` | `SecureRandom`, group coverage and Fisher-Yates shuffle |
+| `PasswordStrength.java` | Entropy estimation with `log₂(pool size)` |
+| `AuroraVaultFrame.java` | A dependency-free Swing interface and persisted preferences |
+| `password-engine.js` | Web Crypto and rejection sampling without modulo bias |
+| `app.js` | DOM events, localization, themes and PWA installation |
+| `sw.js` | A small offline cache with a service worker |
 
-        String genKey = newPass.generateRandomKey(12);
+The focused walkthrough in [docs/LEARNING_GUIDE.md](docs/LEARNING_GUIDE.md) explains how a click becomes a secure password in both implementations.
 
-        System.out.println("\nYour new Pass: " + genKey);
-    }
-}
-```
+## Build and test
 
-### Utils.java
-This class contains the logic for generating the random password and displaying the progress bar.
-```
-public class Utils {
+Requirements: JDK 17, Maven 3.9 and Node.js 20 or newer.
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
-    private static final SecureRandom RANDOM = new SecureRandom();
-
-    public String generateRandomKey(int length) throws InterruptedException {
-        StringBuilder password = new StringBuilder(length);
-        for (int i = 0; i <= 20; i++) {
-            if (i < 20) {
-                int index = RANDOM.nextInt(CHARACTERS.length());
-                if (password.length() < length) {
-                    password.append(CHARACTERS.charAt(index));
-                }
-            }
-            displayProgress(i, 20);
-            Thread.sleep(250); // Simulate some delay in generation
-        }
-        return password.toString();
-    }
-
-    private void displayProgress(int current, int total) {
-        int percent = (int) ((current / (double) total) * 100);
-        StringBuilder progress = new StringBuilder("[");
-
-        for (int i = 0; i < total; i++) {
-            if (i < current) {
-                progress.append("#");
-            } else {
-                progress.append(" ");
-            }
-        }
-        progress.append("] ").append(percent).append("% ");
-
-        System.out.print("\r" + progress.toString());
-    }
-}
+```bash
+mvn clean verify
+npm test
+java -jar target/aurora-vault.jar --diagnostics
 ```
 
-# License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Run the desktop app:
 
-# Acknowledgements
-Inspired by various console-based applications that visually display progress updates.
-
-
-### LICENSE
-```markdown
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```bash
+java -jar target/aurora-vault.jar
 ```
+
+Preview the PWA:
+
+```bash
+node scripts/serve.mjs
+```
+
+Create a native Windows bundle:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/package.ps1
+```
+
+## Security scope
+
+Aurora Vault uses secure operating-system randomness and avoids modulo bias in the web implementation. The strength label is a theoretical entropy estimate, not a promise that a website stores passwords safely. Use a different generated password for every account and keep it in a trusted password manager.
+
+## License
+
+Copyright © 2024-2026 Stephane Sob Fouodji. Released under the [MIT License](LICENSE).
+
+**THOR // aurora link secure.** 🟢🛰️

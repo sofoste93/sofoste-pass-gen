@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Aurora Vault">
+  <defs><linearGradient id="g" x1="18" y1="12" x2="112" y2="116" gradientUnits="userSpaceOnUse"><stop stop-color="#5bf0c4"/><stop offset="1" stop-color="#ffbe5c"/></linearGradient></defs>
+  <rect width="128" height="128" rx="34" fill="#0a2029"/>
+  <circle cx="64" cy="64" r="43" fill="none" stroke="url(#g)" stroke-width="7" stroke-dasharray="169 42" stroke-linecap="round" transform="rotate(-28 64 64)"/>
+  <path d="M41 62c6-24 41-24 47 0v11c0 18-11 29-24 35-13-6-24-17-24-35z" fill="#0f3038" stroke="#dffdf2" stroke-width="4"/>
+  <circle cx="64" cy="73" r="7" fill="#ffbe5c"/><path d="M64 80v12" stroke="#ffbe5c" stroke-width="6" stroke-linecap="round"/>
+</svg>

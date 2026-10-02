@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071921">
+  <meta name="description" content="Generate strong passwords locally. Nothing is sent or stored.">
+  <title>Aurora Vault · Private password studio</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/aurora-vault.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/aurora-vault-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="aurora aurora-one" aria-hidden="true"></div>
+  <div class="aurora aurora-two" aria-hidden="true"></div>
+  <header class="site-header shell">
+    <a class="brand" href="./" aria-label="Aurora Vault home">
+      <img src="assets/aurora-vault.svg" width="44" height="44" alt="">
+      <span><strong>AURORA VAULT</strong><small data-i18n="edition">PRIVATE PASSWORD STUDIO · 2.0</small></span>
+    </a>
+    <nav aria-label="Utilities">
+      <button class="quiet-button" id="installButton" hidden data-i18n="install">Install app</button>
+      <button class="icon-button" data-dialog="helpDialog"><span aria-hidden="true">?</span><span data-i18n="help">Help</span></button>
+      <button class="icon-button" data-dialog="settingsDialog"><span aria-hidden="true">⚙</span><span data-i18n="settings">Settings</span></button>
+    </nav>
+  </header>
+
+  <main class="shell workspace">
+    <section class="mission" aria-labelledby="heroTitle">
+      <p class="eyebrow" data-i18n="eyebrow">ZERO-KNOWLEDGE GENERATOR</p>
+      <h1 id="heroTitle" data-i18n="title">Strong passwords.<br><em>Quietly generated.</em></h1>
+      <p class="intro" data-i18n="intro">Build unique credentials on your device. Nothing is sent, saved or observed.</p>
+      <div class="signals" aria-label="Privacy facts">
+        <article><strong>LOCAL</strong><span data-i18n="local">On device</span></article>
+        <article><strong>CSPRNG</strong><span data-i18n="secure">Secure random</span></article>
+        <article><strong>0 BYTE</strong><span data-i18n="tracking">Tracking</span></article>
+      </div>
+      <p class="mobile-note"><span class="pulse-dot"></span><span data-i18n="offline">Ready offline after the first visit</span></p>
+    </section>
+
+    <section class="vault-card" aria-labelledby="generatorTitle">
+      <div class="card-heading">
+        <div><p class="micro" data-i18n="password">YOUR NEW PASSWORD</p><h2 id="generatorTitle" data-i18n="generator">Generator</h2></div>
+        <span class="status-chip"><i></i><span data-i18n="private">Private</span></span>
+      </div>
+
+      <div class="password-output">
+        <output id="passwordOutput" aria-live="polite"></output>
+        <button id="copyButton" class="copy-button" data-i18n="copy" aria-label="Copy password">Copy</button>
+      </div>
+
+      <div class="length-row">
+        <label for="length"><span data-i18n="length">Length</span><strong id="lengthValue">20</strong></label>
+        <input id="length" type="range" min="8" max="64" value="20">
+        <div class="range-labels" aria-hidden="true"><span>8</span><span>64</span></div>
+      </div>
+
+      <fieldset class="options">
+        <legend data-i18n="characters">CHARACTERS</legend>
+        <label><input type="checkbox" id="uppercase" checked><span><b>A</b><span data-i18n="uppercase">Uppercase</span></span></label>
+        <label><input type="checkbox" id="lowercase" checked><span><b>a</b><span data-i18n="lowercase">Lowercase</span></span></label>
+        <label><input type="checkbox" id="numbers" checked><span><b>7</b><span data-i18n="numbers">Numbers</span></span></label>
+        <label><input type="checkbox" id="symbols" checked><span><b>#</b><span data-i18n="symbols">Symbols</span></span></label>
+      </fieldset>
+
+      <label class="ambiguous"><input type="checkbox" id="excludeAmbiguous" checked><span></span><span data-i18n="ambiguous">Avoid similar characters such as 0/O and 1/l</span></label>
+
+      <div class="strength-row">
+        <div><span class="micro" data-i18n="strength">ESTIMATED STRENGTH</span><strong id="strengthLabel">Exceptional</strong></div>
+        <span id="entropyLabel">126 bits</span>
+      </div>
+      <div class="strength-track"><i id="strengthBar"></i></div>
+
+      <button class="primary-button" id="generateButton"><span data-i18n="generate">Generate secure password</span><b aria-hidden="true">↻</b></button>
+      <p class="shortcut" data-i18n="shortcut">Press Space to generate again</p>
+    </section>
+  </main>
+
+  <footer class="shell"><span data-i18n="footer">Generated locally with Web Crypto</span><span>THOR // AURORA LINK SECURE</span></footer>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head"><div><p class="micro" data-i18n="preferences">PREFERENCES</p><h2 data-i18n="settings">Settings</h2></div><button class="close-button" value="cancel" aria-label="Close">×</button></div>
+      <label class="select-field"><span data-i18n="language">Language</span><select id="language"><option value="en">English</option><option value="de">Deutsch</option></select></label>
+      <label class="select-field"><span data-i18n="appearance">Appearance</span><select id="theme"><option value="system" data-i18n="system">System</option><option value="dark" data-i18n="dark">Aurora night</option><option value="light" data-i18n="light">Polar day</option></select></label>
+      <label class="setting-toggle"><span><strong data-i18n="motion">Motion</strong><small data-i18n="motionHelp">Animate the background aurora</small></span><input id="motion" type="checkbox" checked></label>
+      <button class="primary-button" value="default" id="saveSettings" data-i18n="save">Save settings</button>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog">
+    <form method="dialog" class="dialog-card help-card">
+      <div class="dialog-head"><div><p class="micro">AURORA FIELD GUIDE</p><h2 data-i18n="helpTitle">How it works</h2></div><button class="close-button" value="cancel" aria-label="Close">×</button></div>
+      <ol>
+        <li><b>01</b><span><strong data-i18n="helpOneTitle">Choose a length</strong><small data-i18n="helpOneText">Twenty characters is a strong default for most accounts.</small></span></li>
+        <li><b>02</b><span><strong data-i18n="helpTwoTitle">Select character groups</strong><small data-i18n="helpTwoText">Aurora guarantees at least one character from each selected group.</small></span></li>
+        <li><b>03</b><span><strong data-i18n="helpThreeTitle">Copy and store safely</strong><small data-i18n="helpThreeText">Use a password manager. Aurora never saves generated values.</small></span></li>
+      </ol>
+      <div class="privacy-callout"><span>⌁</span><p><strong data-i18n="offlineTitle">Works offline</strong><small data-i18n="offlineText">Install Aurora Vault from your browser menu to use it like an app on phone or desktop.</small></p></div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
